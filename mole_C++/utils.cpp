@@ -4,23 +4,23 @@
 #include <eigen3/Eigen/SparseLU>
 vec Utils::spsolve_eigen(const sp_mat &A, const vec &b)
 {
-	Eigen::SparseMatrix<Real> eigen_A(A.n_rows, A.n_cols);
-	std::vector<Eigen::Triplet<Real>> triplets;
-	Eigen::SparseLU<Eigen::SparseMatrix<Real>, Eigen::COLAMDOrdering<int>> solver;
+	Eigen::SparseMatrix<double> eigen_A(A.n_rows, A.n_cols);
+	std::vector<Eigen::Triplet<double>> triplets;
+	Eigen::SparseLU<Eigen::SparseMatrix<double>, Eigen::COLAMDOrdering<int>> solver;
 
 	Eigen::VectorXd eigen_x(A.n_rows);
 	triplets.reserve(5*A.n_rows);
 
 	auto it = A.begin();
 	while(it != A.end()) {
-		triplets.push_back(Eigen::Triplet<Real>(it.row(), it.col(), *it));
+		triplets.push_back(Eigen::Triplet<double>(it.row(), it.col(), *it));
 		++it;
 	}
 
 	eigen_A.setFromTriplets(triplets.begin(), triplets.end());
 	triplets.clear();
 
-	auto b_ = conv_to<std::vector<Real> >::from(b);
+	auto b_ = conv_to<std::vector<double> >::from(b);
 	Eigen::Map<Eigen::VectorXd> eigen_b(b_.data(), b_.size());
 
 	solver.analyzePattern(eigen_A);
@@ -149,4 +149,91 @@ sp_mat Utils::spjoin_cols(const sp_mat &A, const sp_mat &B)
     sp_mat result(locations, values, A.n_rows+B.n_rows, A.n_cols, true);
 
     return result;
+}
+
+void Utils::meshgrid( const vec &x, const vec &y, mat &X, mat &Y)
+{
+    // Returns:
+    //               &X: fills with X values in MATLAB meshgrid format
+    //               &Y: fills with Y values in MATLAB meshgrid format    
+    //
+    // Parameters:
+    //                x : x-coordinates (physical) of meshgrid
+    //                y : y-coordinates (physical) of meshgrid
+    int m = x.n_elem;
+    int n = y.n_elem;
+    assert (m > 0 );
+    assert (n > 0 );
+
+    //Build X
+    vec t(n, fill::ones);
+    
+    X.zeros(n,m);
+    Y.zeros(n,m);
+
+    for(int ii=0; ii<m; ++ii)
+    {
+        X.col(ii) = x(ii) * t;
+        t.ones();
+    }
+
+    for(int ii=0; ii<m; ++ii)
+    {
+        Y.col(ii) = y;
+    }
+}
+
+
+void Utils::meshgrid( const vec &x, const vec &y, const vec &z, cube &X, cube &Y, cube &Z)
+{
+    // Returns:
+    //               &X: fills with X values in MATLAB meshgrid format
+    //               &Y: fills with Y values in MATLAB meshgrid format    
+    //               &Z: fills with Z values in MATLAB meshgrid format    
+    //
+    // Parameters:
+    //                x : x-coordinates (physical) of meshgrid
+    //                y : y-coordinates (physical) of meshgrid
+    //                z : z-coordinates (physical) of meshgrid
+    int m = x.n_elem;
+    int n = y.n_elem;
+    int o = z.n_elem;
+    assert ( m > 0 );
+    assert ( n > 0 );
+    assert ( o > 0 );
+
+    // Temporary Holder of sheet of cube
+    mat sheet(n,m, fill::zeros);
+
+    //Build X
+    vec t(n, fill::ones);
+    
+    X.zeros(n,m,o);
+    Y.zeros(n,m,o);
+    Z.zeros(n,m,o);
+    // Sheet that repeats each slice
+    for(int ii=0; ii<m; ++ii)
+    {
+        sheet.col(ii) = x(ii) * t;
+        t.ones();
+    }   
+
+    for( int kk=0; kk<o; ++kk){
+        X.slice(kk) = sheet;
+    }
+
+    // Y Cube, repeats same sheet as well
+    for(int ii=0; ii<m; ++ii)
+    {
+        sheet.col(ii) = y;
+    }
+
+    for( int kk=0; kk<o; ++kk){
+        Y.slice(kk) = sheet;
+    }
+
+    // Z cube goes by slices each with same value
+    for( int kk=0; kk<o; ++kk){
+        Z.slice(kk).fill( z(kk) );
+    }
 }

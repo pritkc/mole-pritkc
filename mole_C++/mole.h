@@ -12,5 +12,10 @@
 #include "interpol.h"
 #include "robinbc.h"
 #include "utils.h"
+//#include "curve.h"
+#include "di.h"
+#include "gi.h"
+#include "jacobian.h"
+#include "interp.h"
 
 #endif // MOLE_H
