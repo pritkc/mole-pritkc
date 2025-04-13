@@ -152,18 +152,19 @@ else:
 # MATLAB domain configuration
 #------------------------------------------------------------------------------
 # Path to MATLAB source directory for cross-reference functionality
-matlab_src_dir = '../../src/matlab'  # Using relative path instead of absolute
+matlab_src_dir = os.path.abspath(os.path.join(ROOT_DIR, 'src', 'matlab'))
 
 # Enhanced debug logging
 print("\nDEBUG: Enhanced MATLAB Configuration:")
 print(f"Current working directory: {os.getcwd()}")
-print(f"Absolute path to matlab_src_dir: {os.path.abspath(matlab_src_dir)}")
 print(f"ROOT_DIR value: {ROOT_DIR}")
 print(f"MATLAB source directory: {matlab_src_dir}")
 print(f"Directory exists: {os.path.exists(matlab_src_dir)}")
-print(f"Absolute directory exists: {os.path.exists(os.path.abspath(matlab_src_dir))}")
 try:
-    print(f"Parent directory contents: {os.listdir(os.path.dirname(os.path.abspath(matlab_src_dir)))}")
+    if os.path.exists(os.path.dirname(matlab_src_dir)):
+        print(f"Parent directory contents: {os.listdir(os.path.dirname(matlab_src_dir))}")
+    else:
+        print(f"Parent directory {os.path.dirname(matlab_src_dir)} does not exist")
 except Exception as e:
     print(f"Error listing parent directory: {e}")
 
@@ -175,6 +176,11 @@ try:
     print(f"sphinxcontrib-matlab version: {pkg_resources.get_distribution('sphinxcontrib-matlab').version}")
 except Exception as e:
     print(f"Error getting sphinxcontrib-matlab version: {e}")
+
+# Add MATLAB directory to Python path if it exists
+if os.path.exists(matlab_src_dir):
+    sys.path.insert(0, matlab_src_dir)
+    print(f"\nAdded existing MATLAB directory to Python path: {matlab_src_dir}")
 
 # For matlabdomain, we need to treat MATLAB files as modules
 primary_domain = 'mat'  # Make MATLAB the primary domain for .m files
