@@ -154,16 +154,27 @@ else:
 # Path to MATLAB source directory for cross-reference functionality
 matlab_src_dir = '../../src/matlab'  # Using relative path instead of absolute
 
-# Print debug information for MATLAB path
-print("\nDEBUG: MATLAB Configuration:")
+# Enhanced debug logging
+print("\nDEBUG: Enhanced MATLAB Configuration:")
+print(f"Current working directory: {os.getcwd()}")
+print(f"Absolute path to matlab_src_dir: {os.path.abspath(matlab_src_dir)}")
+print(f"ROOT_DIR value: {ROOT_DIR}")
 print(f"MATLAB source directory: {matlab_src_dir}")
 print(f"Directory exists: {os.path.exists(matlab_src_dir)}")
-print(f"Directory contents: {os.listdir(matlab_src_dir) if os.path.exists(matlab_src_dir) else 'DIRECTORY NOT FOUND'}")
-print(f"Python path: {sys.path}")
+print(f"Absolute directory exists: {os.path.exists(os.path.abspath(matlab_src_dir))}")
+try:
+    print(f"Parent directory contents: {os.listdir(os.path.dirname(os.path.abspath(matlab_src_dir)))}")
+except Exception as e:
+    print(f"Error listing parent directory: {e}")
 
-# Add MATLAB directory to sys.path more explicitly
-sys.path.insert(0, os.path.abspath(matlab_src_dir))
-print(f"Updated Python path: {sys.path}")
+# Version compatibility check
+print("\nDEBUG: Version Information:")
+print(f"Python version: {sys.version}")
+print(f"Sphinx version: {pkg_resources.get_distribution('sphinx').version}")
+try:
+    print(f"sphinxcontrib-matlab version: {pkg_resources.get_distribution('sphinxcontrib-matlab').version}")
+except Exception as e:
+    print(f"Error getting sphinxcontrib-matlab version: {e}")
 
 # For matlabdomain, we need to treat MATLAB files as modules
 primary_domain = 'mat'  # Make MATLAB the primary domain for .m files
