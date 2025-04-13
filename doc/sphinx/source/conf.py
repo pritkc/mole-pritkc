@@ -152,7 +152,7 @@ else:
 # MATLAB domain configuration
 #------------------------------------------------------------------------------
 # Path to MATLAB source directory for cross-reference functionality
-matlab_src_dir = '/Users/pritchakalasiya/Development/mole/mole/src/matlab'
+matlab_src_dir = '../../src/matlab'  # Using relative path instead of absolute
 
 # Print debug information for MATLAB path
 print("\nDEBUG: MATLAB Configuration:")
@@ -162,7 +162,7 @@ print(f"Directory contents: {os.listdir(matlab_src_dir) if os.path.exists(matlab
 print(f"Python path: {sys.path}")
 
 # Add MATLAB directory to sys.path more explicitly
-sys.path.insert(0, matlab_src_dir)
+sys.path.insert(0, os.path.abspath(matlab_src_dir))
 print(f"Updated Python path: {sys.path}")
 
 # For matlabdomain, we need to treat MATLAB files as modules
