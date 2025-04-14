@@ -49,7 +49,6 @@ done
 echo "Creating LaTeX image fix..."
 cat > "$LATEX_DIR/imagequality.sty" << EOL
 % High-quality PDF settings
-\\pdfminorversion=7
 \\pdfcompresslevel=0
 \\pdfobjcompresslevel=0
 \\pdfimageresolution=2400
