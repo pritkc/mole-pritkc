@@ -1,9 +1,9 @@
 ===================
-MOLE MATLAB Module
+MOLE MATLAB/Octave Module
 ===================
 
-This section documents the MATLAB implementation of the MOLE (Mimetic Operators Library Enhanced) toolkit.
-The documentation is generated automatically from the docstrings in the MATLAB source files.
+This section documents the MATLAB/Octave implementation of the MOLE (Mimetic Operators Library Enhanced) toolkit.
+The documentation is generated automatically from the docstrings in the MATLAB/Octave source files.
 
 .. toctree::
    :maxdepth: 2

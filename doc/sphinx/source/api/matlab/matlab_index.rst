@@ -1,7 +1,7 @@
-MATLAB Function Index
+MATLAB/Octave Function Index
 ===========================
 
-This page provides an index of all MATLAB functions in the MOLE library.
+This page provides an index of all MATLAB/Octave functions in the MOLE library.
 
 .. toctree::
    :maxdepth: 2
