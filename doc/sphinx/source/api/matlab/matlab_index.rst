@@ -1,5 +1,5 @@
 MATLAB/Octave Function Index
-===========================
+=========================================
 
 This page provides an index of all MATLAB/Octave functions in the MOLE library.
 

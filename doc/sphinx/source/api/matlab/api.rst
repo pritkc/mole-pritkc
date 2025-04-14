@@ -1,6 +1,6 @@
-=============
+=========================================
 MATLAB/Octave API
-=============
+=========================================
 
 This page documents the API of the MOLE MATLAB/Octave module. Functions are organized by category.
 
