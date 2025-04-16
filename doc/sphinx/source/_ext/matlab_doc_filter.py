@@ -237,9 +237,6 @@ def m2html_style_formatter(app, what, name, obj, options, lines):
         # Get the call information for this function
         function_base_name = name.split('.')[-1] if '.' in name else name
         
-        # DEBUG: Print the function being processed
-        print(f"\nProcessing function: {function_base_name}")
-        
         # For case-insensitivity, try to find a matching function name irrespective of case
         calls_functions = []
         found_in_calls_graph = False
@@ -247,12 +244,7 @@ def m2html_style_formatter(app, what, name, obj, options, lines):
             if func_name.lower() == function_base_name.lower():
                 calls_functions = list(_function_calls_graph[func_name])
                 found_in_calls_graph = True
-                # DEBUG: Log the calls found
-                print(f"  Function calls: {calls_functions}")
                 break
-        
-        if not found_in_calls_graph:
-            print(f"  WARNING: Function {function_base_name} not found in calls graph")
         
         called_by = []
         found_in_dependency_graph = False
@@ -260,130 +252,96 @@ def m2html_style_formatter(app, what, name, obj, options, lines):
             if func_name.lower() == function_base_name.lower():
                 called_by = list(_function_dependency_graph[func_name])
                 found_in_dependency_graph = True
-                # DEBUG: Log the called by found
-                print(f"  Function called by: {called_by}")
                 break
-                
-        if not found_in_dependency_graph:
-            print(f"  WARNING: Function {function_base_name} not found in dependency graph")
         
-        # Extract parameters section
-        parameters_section = []
+        # Extract all content from lines (excluding purpose line, cross-reference info)
+        description_content = []
+        parameters = []
         in_params_section = False
         
-        # Extract description section (everything between first line and parameters)
-        description_section = []
+        # First pass: collect all lines that are not part of the cross-reference section
+        cross_ref_keywords = ['this function calls', 'this function is called by']
+        
         for i, line in enumerate(lines):
-            if i > 0:  # Skip the first line (used as PURPOSE)
-                # Check for parameter section
+            # Skip first line (used as PURPOSE) and cross-reference info
+            if i > 0 and not any(keyword in line.lower() for keyword in cross_ref_keywords):
                 if line.strip().startswith('Parameters:'):
                     in_params_section = True
-                    parameters_section.append(line.strip())
-                # Check for parameters in the param section
-                elif in_params_section:
-                    # Convert :param style to consistent MATLAB style
-                    if line.strip().startswith(':param'):
-                        # Convert :param x: description to x : description
-                        param_match = re.match(r'^\s*:param\s+([^:]+):\s*(.*)', line)
-                        if param_match:
-                            param_name = param_match.group(1).strip()
-                            param_desc = param_match.group(2).strip() or "Parameter description not provided"
-                            # Format with the same spacing as other parameters (right-aligned param names)
-                            formatted_line = f"{param_name:>16} : {param_desc}"
-                            parameters_section.append(formatted_line)
-                        else:
-                            parameters_section.append(line)
-                    elif re.match(r'^\s*([a-zA-Z0-9_]+)\s*:', line):
-                        # This is a normal parameter line (already in the right format)
-                        # Fix parameter formatting (ensure proper spacing)
-                        param_match = re.match(r'^\s*([a-zA-Z0-9_]+)\s*:', line)
-                        if param_match:
-                            param_name = param_match.group(1)
-                            # Check if there's no description after the colon
-                            parts = line.split(':', 1)
-                            if len(parts) > 1 and not parts[1].strip():
-                                formatted_line = f"{param_name:>16} : Parameter description not provided"
-                                parameters_section.append(formatted_line)
-                            else:
-                                # Keep existing formatting but ensure consistent alignment
-                                # Don't change the line itself - add it as is to preserve format
-                                parameters_section.append(line)
-                        else:
-                            parameters_section.append(line)
-                    elif not line.strip():
-                        # Empty line within parameters section
-                        parameters_section.append(line)
-                    elif line.strip() and not line.strip().startswith(' '):
-                        # New section - end of parameters
-                        in_params_section = False
-                        # If this is not part of parameters, it might be part of description
-                        if not ("this function calls" in line.lower() or "this function is called by" in line.lower()):
-                            description_section.append(line)
+                    continue
+                
+                # Check if line looks like a parameter
+                param_match = re.match(r'^\s*([a-zA-Z0-9_]+)\s*:', line) or re.match(r'^\s*:param\s+([^:]+):', line)
+                
+                if param_match:
+                    param_name = param_match.group(1).strip()
+                    if ':' in line:
+                        parts = line.split(':', 1)
+                        desc = parts[1].strip() if len(parts) > 1 and parts[1].strip() else "Parameter description not provided"
                     else:
-                        # Content that's part of the parameter section but not a parameter itself
-                        parameters_section.append(line)
-                elif not in_params_section and not ("this function calls" in line.lower() or "this function is called by" in line.lower()):
-                    # This is part of the description
-                    description_section.append(line)
+                        desc = "Parameter description not provided"
+                    parameters.append((param_name, desc))
+                    in_params_section = True
+                elif not in_params_section:
+                    # If not in parameters section, treat as description
+                    if line.strip() and not line.strip().startswith(':'):
+                        description_content.append(line.strip())
+                elif in_params_section and line.strip() and not re.match(r'^\s*([a-zA-Z0-9_]+)\s*:', line) and not line.strip().startswith(':param'):
+                    # End of parameters section
+                    if not any(keyword in line.lower() for keyword in cross_ref_keywords):
+                        description_content.append(line.strip())
+                    in_params_section = False
         
         # Now reconstruct the docstring in M2HTML style
         new_lines = []
         
-        # PURPOSE section - ensure underline matches length of the title
+        # PURPOSE section
         purpose_title = "PURPOSE"
         new_lines.append(purpose_title)
-        new_lines.append("^" * len(purpose_title))  # Underline matches title length
+        new_lines.append("^" * len(purpose_title))
         new_lines.append(first_desc_line)
         new_lines.append("")
         
-        # SYNOPSIS section - ensure underline matches length of the title
+        # SYNOPSIS section
         synopsis_title = "SYNOPSIS"
         new_lines.append(synopsis_title)
-        new_lines.append("^" * len(synopsis_title))  # Underline matches title length
+        new_lines.append("^" * len(synopsis_title))
         new_lines.append(".. code-block:: matlab")
         new_lines.append("")
         new_lines.append(f"    {signature}")
         new_lines.append("")
         
-        # DESCRIPTION section - ensure underline matches length of the title
+        # DESCRIPTION section
         description_title = "DESCRIPTION"
         new_lines.append(description_title)
-        new_lines.append("^" * len(description_title))  # Underline matches title length
+        new_lines.append("^" * len(description_title))
         
-        if description_section:
+        # Only add a code block if we have content to show
+        if description_content or parameters:
             new_lines.append("")
             new_lines.append(".. code-block:: text")
             new_lines.append("")
-            for d_line in description_section:
-                if d_line.strip():
-                    new_lines.append(f"    {d_line.strip()}")
-                else:
+            
+            # Add description content
+            if description_content:
+                for line in description_content:
+                    new_lines.append(f"    {line}")
+                
+                # Add a blank line between description and parameters if both exist
+                if parameters:
                     new_lines.append(f"    ")
-            new_lines.append("")
+            
+            # Add parameters with proper formatting
+            for param_name, param_desc in parameters:
+                new_lines.append(f"    {param_name:>16} : {param_desc}")
         
-        # Add parameters section as a code block if it exists
-        if parameters_section:
-            new_lines.append("")
-            new_lines.append(".. code-block:: text")
-            new_lines.append("")
-            for p_line in parameters_section:
-                new_lines.append(f"    {p_line}")
-            new_lines.append("")
-        
-        # CROSS-REFERENCE INFORMATION section - ensure underline matches length of the title
+        # CROSS-REFERENCE INFORMATION section
         cross_ref_title = "CROSS-REFERENCE INFORMATION"
         new_lines.append("")
         new_lines.append(cross_ref_title)
-        new_lines.append("^" * len(cross_ref_title))  # Underline matches title length
-        
-        # DEBUG: Log what we're about to render
-        print(f"  Rendering cross-reference section for {function_base_name}")
-        print(f"    Has calls: {bool(calls_functions)}, Has called_by: {bool(called_by)}")
+        new_lines.append("^" * len(cross_ref_title))
         
         if calls_functions or called_by:
             if calls_functions:
-                # DEBUG: Log we're entering calls section
-                print(f"    Adding 'This function calls' section with {len(calls_functions)} functions")
                 new_lines.append("This function calls:")
                 new_lines.append("")  # Add empty line after section title
                 for i, func in enumerate(calls_functions):
@@ -406,16 +364,9 @@ def m2html_style_formatter(app, what, name, obj, options, lines):
                     # Add a paragraph break between entries
                     if i < len(calls_functions) - 1:
                         new_lines.append("")
-                    # DEBUG: Log each line being added
-                    print(f"      Added: {new_line}")
                 new_lines.append("")
-            else:
-                # DEBUG: Log when calls list is empty
-                print(f"    Skipping 'This function calls' section - no functions to list")
             
             if called_by:
-                # DEBUG: Log we're entering called_by section
-                print(f"    Adding 'This function is called by' section with {len(called_by)} functions")
                 new_lines.append("This function is called by:")
                 new_lines.append("")  # Add empty line after section title
                 for i, func in enumerate(called_by):
@@ -438,8 +389,6 @@ def m2html_style_formatter(app, what, name, obj, options, lines):
                     # Add a paragraph break between entries
                     if i < len(called_by) - 1:
                         new_lines.append("")
-                    # DEBUG: Log each line being added
-                    print(f"      Added: {new_line}")
         else:
             new_lines.append("No cross-reference information found. This typically means this function neither calls nor is called by other functions in the codebase.")
         
