@@ -214,6 +214,15 @@ def m2html_style_formatter(app, what, name, obj, options, lines):
                 del lines[idx]
     
     if m2html_style and len(lines) > 0:
+        # Process parameter descriptions - convert :param k: to k:
+        for i, line in enumerate(lines):
+            # Match :param name: description pattern
+            param_match = re.match(r'\s*:param\s+(\w+):\s*(.*)', line)
+            if param_match:
+                param_name = param_match.group(1)
+                param_desc = param_match.group(2)
+                lines[i] = f"{param_name} : {param_desc}"
+        
         # Extract function signature if available
         signature = ""
         if what == 'function' and name:
