@@ -1,3 +1,3 @@
-# Documentation README
+<!-- # Documentation README -->
 
-```{include} ../../../../README.md
+```{include} ../../README.md
