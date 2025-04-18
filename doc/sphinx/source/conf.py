@@ -81,6 +81,9 @@ myst_enable_extensions = [
     "tasklist"         # Task lists
 ]
 
+# Make sure mermaid directive is recognized
+myst_enable_extensions += ["amsmath", "colon_fence"]
+
 # Configure HTML image handling
 html_copy_source = True
 html_show_sourcelink = True
@@ -147,6 +150,10 @@ else:
     print("WARNING: Mermaid CLI not found. Mermaid diagrams will not be rendered.")
     print("To install Mermaid CLI, run: npm install -g @mermaid-js/mermaid-cli")
     print("="*80 + "\n")
+
+# Additional Mermaid settings
+mermaid_params = ["--backgroundColor", "transparent"]
+mermaid_output_format = "svg"
 
 #------------------------------------------------------------------------------
 # MATLAB domain configuration

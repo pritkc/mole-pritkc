@@ -72,6 +72,40 @@ Before building the documentation, ensure you have:
    brew install --cask mactex
    ```
 
+6. **Mermaid CLI** (required for Mermaid diagrams):
+   ```bash
+   # Install Node.js if not already installed
+   # Ubuntu/Debian
+   sudo apt install nodejs npm
+   
+   # macOS
+   brew install node
+   
+   # RHEL/CentOS/Fedora
+   sudo dnf install nodejs
+   
+   # Install Mermaid CLI globally
+   npm install -g @mermaid-js/mermaid-cli
+   
+   # Alternatively, you can use npx without installing globally
+   # Just make sure you have Node.js and npm installed
+   # The build system will detect if mmdc is available directly or via npx
+   ```
+
+   We provide a diagnostic script to verify your Mermaid CLI installation:
+   ```bash
+   # Navigate to the documentation directory
+   cd doc/sphinx
+   
+   # Make the script executable if needed
+   chmod +x check_mermaid.sh
+   
+   # Run the verification script
+   ./check_mermaid.sh
+   ```
+   
+   The script will check if Mermaid CLI is properly installed and provide guidance if it's not.
+
 5. **Python dependencies**:
    First, ensure Python 3 and pip are installed:
    ```bash

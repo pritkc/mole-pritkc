@@ -6,6 +6,133 @@ This page provides an index of all MATLAB/Octave functions in the MOLE library.
 .. toctree::
    :maxdepth: 2
 
+.. mermaid::
+
+    classDiagram
+        %% Main operator categories
+        class DifferentialOperators {
+            Gradient
+            Divergence
+            Laplacian
+            Nodal
+        }
+        
+        class InterpolationOperators {
+            Interpol
+            InterpolD
+            NodesToCenters
+            CentersToNodes
+            CentersToFaces
+            FacesToCenters
+        }
+        
+        class BoundaryConditions {
+            MixedBC
+            RobinBC
+            addBC
+        }
+        
+        class GridTransformation {
+            gridGen
+            tfi
+            ttm
+            jacobian2D
+            jacobian3D
+        }
+        
+        class UtilityFunctions {
+            weightsP/Q
+            amean/hmean
+            curl2D
+            DI2/DI3
+            GI1/GI2/GI13
+            rk4
+        }
+        
+        %% Function relationships
+        DifferentialOperators -- InterpolationOperators : work with
+        DifferentialOperators -- BoundaryConditions : enhanced by
+        BoundaryConditions --> DifferentialOperators : use
+        GridTransformation -- DifferentialOperators : support
+        UtilityFunctions -- DifferentialOperators : support
+        
+        %% Dimensionality inheritance/extensions
+        class Grad1D {
+            grad(k,m,dx)
+            gradNonUniform(k,m,dx,x)
+        }
+        
+        class Grad2D {
+            grad2D(k,m,n,dx,dy)
+            grad2DCurv(...)
+            grad2DNonUniform(...)
+        }
+        
+        class Grad3D {
+            grad3D(k,m,n,o,dx,dy,dz)
+            grad3DCurv(...)
+            grad3DNonUniform(...)
+        }
+        
+        class Div1D {
+            div(k,m,dx)
+            divNonUniform(k,m,dx,x)
+        }
+        
+        class Div2D {
+            div2D(k,m,n,dx,dy)
+            div2DCurv(...)
+            div2DNonUniform(...)
+        }
+        
+        class Div3D {
+            div3D(k,m,n,o,dx,dy,dz)
+            div3DCurv(...)
+            div3DNonUniform(...)
+        }
+        
+        class Lap1D {
+            lap(k,m,dx)
+        }
+        
+        class Lap2D {
+            lap2D(k,m,n,dx,dy)
+        }
+        
+        class Lap3D {
+            lap3D(k,m,n,o,dx,dy,dz)
+        }
+        
+        class BC1D {
+            mixedBC(k,m,dx,...)
+            robinBC(k,m,dx,...)
+            addBC1D(...)
+        }
+        
+        class BC2D {
+            mixedBC2D(k,m,n,dx,dy,...)
+            robinBC2D(k,m,n,dx,dy,...)
+            addBC2D(...)
+        }
+        
+        class BC3D {
+            mixedBC3D(k,m,n,o,dx,dy,dz,...)
+            robinBC3D(k,m,n,o,dx,dy,dz,...)
+            addBC3D(...)
+        }
+        
+        %% Operator relationships
+        Lap1D --> Grad1D : uses
+        Lap1D --> Div1D : uses
+        Lap2D --> Grad2D : uses
+        Lap2D --> Div2D : uses
+        Lap3D --> Grad3D : uses
+        Lap3D --> Div3D : uses
+        
+        BC1D --> Grad1D : uses
+        BC2D --> Grad2D : uses
+        BC3D --> Grad3D : uses
+
 Gradient Operators
 ----------------------------
 
