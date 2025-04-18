@@ -111,3 +111,18 @@ doc-all: doc-clean doc-doxygen doc-deps doc-html doc-latexpdf
 # Explicit Sphinx targets
 $(SPHINX_TARGETS):
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS)
+	
+.PHONY: doc-clean
+doc-clean: 
+	rm -rf $(BUILDDIR)/*
+	rm -rf source/examples
+	rm -rf source/_images
+	rm -f source/README.md
+
+.PHONY: copy-images
+copy-images:
+	mkdir -p source/_images
+	cp -r ../assets/img/* source/_images/
+
+html: copy-images
+	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)

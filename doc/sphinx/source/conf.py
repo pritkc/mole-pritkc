@@ -12,6 +12,7 @@ import shutil
 import subprocess
 import importlib.util
 import pkg_resources
+import glob
 
 #------------------------------------------------------------------------------
 # Path configuration
@@ -91,11 +92,8 @@ html_show_sourcelink = True
 # Image and static file configuration
 html_static_path = ['_static']
 html_extra_path = [
-    str(ROOT_DIR / 'README.md'),
     str(ROOT_DIR / 'doc/doxygen'),
-    str(ROOT_DIR / 'doc/assets'),
     str(ROOT_DIR / 'doc/sphinx/README.md'),
-    str(ROOT_DIR / 'doc/sphinx/source/api/examples/md/figures')  # Figures for markdown docs
 ]
 
 # Additional MyST settings
@@ -228,7 +226,11 @@ source_suffix = {
 
 # Directories and files to exclude
 templates_path = ['_templates']
-exclude_patterns = []
+exclude_patterns = [
+    'README.md',  # Only exclude the root README
+    'api/examples-m/tex/list.md',
+    'api/examples/index.md',
+]
 
 # Link handling
 follow_links = True
@@ -330,3 +332,38 @@ myst_dmath_double_inline = False
 
 # For LaTeX output
 latex_use_xindy = False  # Disable xindy for better compatibility
+
+#------------------------------------------------------------------------------
+# File copying configuration
+#------------------------------------------------------------------------------
+def mkdir_p(path):
+    try:
+        os.makedirs(path)
+    except FileExistsError:
+        pass
+
+# Clean up and copy example documentation from source tree
+example_dest = str(ROOT_DIR / "doc/sphinx/source/examples")
+try:
+    if os.path.exists(example_dest):
+        shutil.rmtree(example_dest)
+except FileNotFoundError:
+    pass
+
+# Copy all markdown files from examples directory
+for filename in glob.glob(str(ROOT_DIR / "examples/**/*.md"), recursive=True):
+    rel_path = os.path.relpath(filename, str(ROOT_DIR / "examples"))
+    destdir = os.path.join(example_dest, os.path.dirname(rel_path))
+    mkdir_p(destdir)
+    shutil.copy2(filename, destdir)
+
+# Copy all image files from examples directory
+for ext in ['*.jpg', '*.jpeg', '*.png', '*.svg']:
+    for filename in glob.glob(str(ROOT_DIR / "examples/**/" / ext), recursive=True):
+        rel_path = os.path.relpath(filename, str(ROOT_DIR / "examples"))
+        destdir = os.path.join(example_dest, os.path.dirname(rel_path))
+        mkdir_p(destdir)
+        shutil.copy2(filename, destdir)
+
+# Do NOT copy README.md from root
+# shutil.copy2(str(ROOT_DIR / "README.md"), str(ROOT_DIR / "doc/sphinx/source"))

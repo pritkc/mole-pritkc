@@ -85,7 +85,8 @@ api/math_functions/index
 :maxdepth: 2
 :caption: Examples
 
-api/examples/index
+api/examples-m/index
+new examples <examples/index>
 ```
 
 ```{toctree}
