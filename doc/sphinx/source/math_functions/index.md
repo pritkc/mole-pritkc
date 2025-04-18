@@ -6,8 +6,8 @@ This section provides detailed mathematical descriptions of the operators implem
 :maxdepth: 2
 :caption: Mathematical Functions
 
-function1
-function2
+CSRCReportOnMOLE
+StaggeredGrids
 ```
 
 Additional operators will be documented in the future. 

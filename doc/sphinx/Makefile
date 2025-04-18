@@ -123,6 +123,9 @@ doc-clean:
 copy-images:
 	mkdir -p source/_images
 	cp -r ../assets/img/* source/_images/
+	# Copy README images to the _images directory for proper reference
+	mkdir -p source/intros/doc/assets/img
+	cp -r ../assets/img/* source/intros/doc/assets/img/
 
 html: copy-images
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
