@@ -85,7 +85,15 @@ math_functions/index
 :maxdepth: 2
 :caption: Examples
 
-examples/index
+examples/Jacobian
+examples/NonUniformGradAndDiv
+examples/Poisson1D
+examples/Schrodinger1D
+examples/transport1D
+examples/examples
+examples/cpp/README
+examples/matlab/compact_operators/README
+examples/README
 ```
 
 ```{toctree}
