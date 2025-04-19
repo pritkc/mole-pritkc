@@ -49,7 +49,7 @@ extensions = [
     'sphinx.ext.intersphinx', # Link to other project's documentation
     
     # Theme
-    'sphinx_rtd_theme',       # Read the Docs theme
+    'furo',                   # Furo theme
     
     # External documentation extensions
     'breathe',                # Doxygen integration
@@ -239,14 +239,19 @@ follow_links = True
 # HTML output configuration
 #------------------------------------------------------------------------------
 # Theme settings
-html_theme = 'sphinx_rtd_theme'
+html_theme = 'furo'
 html_theme_options = {
-    "style_external_links": True,
-    "logo_only": True,
-    "navigation_depth": 3,
-    "includehidden": True,
-    "titles_only": False,
-    "collapse_navigation": False
+    "sidebar_hide_name": False,
+    "navigation_with_keys": True,
+    "announcement": "This is a development version of the MOLE documentation.",
+    "light_css_variables": {
+        "color-brand-primary": "#2962ff",
+        "color-brand-content": "#2962ff",
+    },
+    "dark_css_variables": {
+        "color-brand-primary": "#5c85ff",
+        "color-brand-content": "#5c85ff",
+    },
 }
 
 # Appearance
