@@ -361,18 +361,13 @@ for filename in glob.glob(str(ROOT_DIR / "examples/**/*.md"), recursive=True):
     destdir = os.path.join(example_dest, os.path.dirname(rel_path))
     dest_file = os.path.join(destdir, os.path.basename(rel_path))
     
-    # Check if this is a README file that we should exclude
-    skip_file = False
-    for pattern in exclude_patterns:
-        if pattern.endswith(rel_path):
-            skip_file = True
-            print(f"DEBUG: Skipping README file: {filename}")
-            break
+    # Only exclude if the relative path exactly matches an exclude pattern
+    skip_file = rel_path in exclude_patterns
     
     if not skip_file:
         mkdir_p(destdir)
         shutil.copy2(filename, destdir)
-        print(f"DEBUG: Copied file: {filename} to {destdir}")
+        print(f"DEBUG: Copied markdown file: {filename} to {destdir}")
 
 # Copy all image files from examples directory
 for ext in ['*.jpg', '*.jpeg', '*.png', '*.svg']:
@@ -381,6 +376,7 @@ for ext in ['*.jpg', '*.jpeg', '*.png', '*.svg']:
         destdir = os.path.join(example_dest, os.path.dirname(rel_path))
         mkdir_p(destdir)
         shutil.copy2(filename, destdir)
+        print(f"DEBUG: Copied image file: {filename} to {destdir}")
 
 # Debug info to help troubleshoot file copying
 print("\nDEBUG: Directory Structure Before File Operations:")
