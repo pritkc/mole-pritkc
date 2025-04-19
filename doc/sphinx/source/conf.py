@@ -49,7 +49,7 @@ extensions = [
     'sphinx.ext.intersphinx', # Link to other project's documentation
     
     # Theme
-    'furo',                   # Furo theme
+    # 'furo',                   # we don't have to mention Furo in order to use it.
     
     # External documentation extensions
     'breathe',                # Doxygen integration
@@ -247,18 +247,59 @@ html_theme_options = {
     "light_css_variables": {
         "color-brand-primary": "#2962ff",
         "color-brand-content": "#2962ff",
+        "color-sidebar-background": "#f8f9fa",
+        "color-sidebar-background-border": "#e9ecef",
+        "color-sidebar-link-text": "#2c3e50",
+        "color-sidebar-link-text--top-level": "#1a5276",
+        "color-sidebar-caption-text": "#495057",
+        "color-sidebar-item-background--hover": "#e9ecef",
+        "color-sidebar-item-expander-background--hover": "#dee2e6",
+        "color-toc-title-text": "#2c3e50",
+        "color-toc-item-text--hover": "#2962ff",
+        "color-admonition-title-background--note": "#d1ecf1",
+        "color-admonition-title-background--tip": "#d4edda",
+        "color-admonition-title-background--warning": "#fff3cd",
+        "color-admonition-title-background--important": "#f8d7da",
     },
     "dark_css_variables": {
         "color-brand-primary": "#5c85ff",
         "color-brand-content": "#5c85ff",
+        "color-sidebar-background": "#1a1d21",
+        "color-sidebar-background-border": "#2d333b",
+        "color-sidebar-link-text": "#ffffff",
+        "color-sidebar-link-text--top-level": "#d3d4d5",
+        "color-sidebar-caption-text": "#a0a1a2",
+        "color-sidebar-item-background--hover": "#2d333b",
+        "color-sidebar-item-expander-background--hover": "#373e47",
+        "color-toc-title-text": "#ffffff",
+        "color-toc-item-text--hover": "#5c85ff",
+        "color-admonition-title-background--note": "#1c2841",
+        "color-admonition-title-background--tip": "#1e3b2f",
+        "color-admonition-title-background--warning": "#41351d",
+        "color-admonition-title-background--important": "#3b1d1d",
     },
 }
 
 # Appearance
 html_logo = str(ROOT_DIR / "logo.png")
 html_css_files = [
-    'css/custom.css',
+    'css/furo-custom.css',
 ]
+
+# JavaScript files
+html_js_files = [
+    'js/custom.js',
+]
+
+# Favicon configuration
+html_favicon = str(ROOT_DIR / "logo.png")
+
+# Static files
+html_static_path = ['_static']
+html_extra_path = []
+
+# Title formatting
+html_title = f"{project} Documentation"
 
 #------------------------------------------------------------------------------
 # Warning suppression

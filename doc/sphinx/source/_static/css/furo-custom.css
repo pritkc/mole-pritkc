@@ -1,0 +1,326 @@
+/* Custom styling for MOLE documentation - Furo Theme */
+
+/* CSS Variables Override */
+:root {
+    --color-foreground-primary: #2c3e50;
+    --color-foreground-secondary: #505a66;
+    --color-foreground-muted: #687683;
+    
+    /* Link colors */
+    --color-link: #2962ff;
+    --color-link-hover: #5c85ff;
+    
+    /* Code colors */
+    --color-code-background: #f8f9fa;
+    --color-code-foreground: #2c3e50;
+    
+    /* Admonition colors */
+    --color-admonition-background: #f8f9fa;
+
+    /* Card colors */
+    --color-card-background: #ffffff;
+    --color-card-border: #e9ecef;
+}
+
+[data-theme="dark"] {
+    --color-foreground-primary: #ffffff;
+    --color-foreground-secondary: #d3d4d5;
+    --color-foreground-muted: #a0a1a2;
+    
+    /* Link colors - dark theme */
+    --color-link: #5c85ff;
+    --color-link-hover: #7c9dff;
+    
+    /* Code colors - dark theme */
+    --color-code-background: #2d333b;
+    --color-code-foreground: #adbac7;
+    
+    /* Admonition colors - dark theme */
+    --color-admonition-background: #2d333b;
+
+    /* Card colors - dark theme */
+    --color-card-background: #2d333b;
+    --color-card-border: #444c56;
+}
+
+/* Theme Switcher Enhancement */
+.theme-toggle {
+    padding: 0.5rem;
+    margin: 1rem 0;
+    border-radius: 6px;
+    background: var(--color-card-background);
+    border: 1px solid var(--color-card-border);
+    transition: all 0.2s ease;
+}
+
+.theme-toggle:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Navigation Enhancement */
+.toc-scroll {
+    padding-right: 1rem;
+}
+
+.toc-title {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.toc-tree li {
+    margin: 0.5rem 0;
+    transition: all 0.2s ease;
+}
+
+.toc-tree li:hover {
+    transform: translateX(4px);
+}
+
+/* Card Layout for Important Sections */
+.card {
+    background: var(--color-card-background);
+    border: 1px solid var(--color-card-border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    transition: all 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+    font-size: 1.2em;
+    color: var(--color-foreground-primary);
+    margin-bottom: 1rem;
+    border-bottom: 2px solid var(--color-link);
+    padding-bottom: 0.5rem;
+}
+
+/* Enhanced Code Copy Button */
+.highlight {
+    position: relative;
+}
+
+.highlight button {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    background: var(--color-card-background);
+    border: 1px solid var(--color-card-border);
+    border-radius: 4px;
+    color: var(--color-foreground-muted);
+    font-size: 0.8em;
+    transition: all 0.2s ease;
+    opacity: 0;
+}
+
+.highlight:hover button {
+    opacity: 1;
+}
+
+.highlight button:hover {
+    background: var(--color-link);
+    color: white;
+    border-color: var(--color-link);
+}
+
+/* Search Enhancement */
+.search-input {
+    border-radius: 6px;
+    border: 1px solid var(--color-card-border);
+    padding: 0.5rem;
+    width: 100%;
+    background: var(--color-card-background);
+    color: var(--color-foreground-primary);
+    transition: all 0.2s ease;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--color-link);
+    box-shadow: 0 0 0 3px rgba(41, 98, 255, 0.1);
+}
+
+/* Progress Bar for Long Pages */
+.progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--color-link);
+    transform-origin: 0 50%;
+    transform: scaleX(0);
+    transition: transform 0.2s ease;
+    z-index: 1000;
+}
+
+/* Breadcrumbs Enhancement */
+.breadcrumbs {
+    padding: 1rem 0;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--color-card-border);
+}
+
+.breadcrumbs ul {
+    display: flex;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.breadcrumbs li:not(:last-child)::after {
+    content: "/";
+    margin-left: 0.5rem;
+    color: var(--color-foreground-muted);
+}
+
+/* Footer Enhancement */
+.footer {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-card-border);
+    color: var(--color-foreground-muted);
+    font-size: 0.9em;
+}
+
+/* Typography Improvements */
+h1, h2, h3, h4, h5, h6 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+h1 {
+    font-size: 2.2em;
+    border-bottom: 2px solid var(--color-link);
+    padding-bottom: 0.5rem;
+}
+
+h2 {
+    font-size: 1.8em;
+    border-bottom: 1px solid var(--color-foreground-muted);
+    padding-bottom: 0.3rem;
+}
+
+/* Code Blocks */
+pre {
+    border-radius: 6px;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+.highlight {
+    background: var(--color-code-background);
+    border-radius: 6px;
+}
+
+/* Admonitions */
+.admonition {
+    border-radius: 6px;
+    margin: 1.5rem 0;
+    padding: 0.5rem 1rem;
+    border-left: 4px solid var(--color-link);
+}
+
+.admonition.note {
+    background-color: var(--color-admonition-background);
+}
+
+.admonition.warning {
+    border-left-color: #f39c12;
+}
+
+.admonition.important {
+    border-left-color: #e74c3c;
+}
+
+.admonition.tip {
+    border-left-color: #2ecc71;
+}
+
+/* MATLAB specific styling */
+.matlab-code {
+    background-color: var(--color-code-background);
+    border-left: 3px solid #0076a8;
+    margin: 1rem 0;
+    padding: 1rem;
+}
+
+/* Component boxes */
+.component-box {
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    background-color: var(--color-admonition-background);
+    border-radius: 8px;
+    border: 1px solid var(--color-foreground-muted);
+    transition: transform 0.2s ease;
+}
+
+.component-box:hover {
+    transform: translateY(-2px);
+}
+
+/* Section icons */
+.operator-icon { color: #e74c3c; }
+.boundary-icon { color: #2ecc71; }
+.utils-icon { color: #f39c12; }
+.matlab-icon { color: #0076a8; }
+
+/* Mermaid diagrams */
+.mermaid {
+    margin: 2rem auto;
+    text-align: center;
+    background: var(--color-code-background);
+    padding: 1rem;
+    border-radius: 6px;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    margin: 1rem 0;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 0.75rem;
+    border: 1px solid var(--color-foreground-muted);
+}
+
+th {
+    background-color: var(--color-admonition-background);
+}
+
+/* Breathe/Doxygen Integration */
+.breathe-sectiondef {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background-color: var(--color-admonition-background);
+    border-radius: 6px;
+}
+
+.breathe-sectiondef-title {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: var(--color-foreground-primary);
+}
+
+/* Sidebar Customization */
+.sidebar-brand {
+    margin: 1rem 0;
+}
+
+.sidebar-search {
+    margin: 1rem 0;
+}
+
+.sidebar-search-container {
+    border-radius: 6px;
+} 
