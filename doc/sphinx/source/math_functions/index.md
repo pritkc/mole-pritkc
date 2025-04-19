@@ -8,6 +8,8 @@ This section provides detailed mathematical descriptions of the operators implem
 
 CSRCReportOnMOLE
 StaggeredGrids
+Jacobian 
+NonUniformGradAndDiv
 ```
 
 Additional operators will be documented in the future. 

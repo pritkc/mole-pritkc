@@ -10,11 +10,6 @@ README
 examples
 cpp/README
 matlab/compact_operators/README
-Jacobian
-NonUniformGradAndDiv
-Poisson1D
-Schrodinger1D
-transport1D
 ```
 
 More examples will be added in the future. 
